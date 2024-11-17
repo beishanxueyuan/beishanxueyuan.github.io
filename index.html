@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北山学院网络安全</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header {
+            margin: 3rem 0;
+        }
+
+        .title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            margin-bottom: 3rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            padding: 2rem 3rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: white;
+            width: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .team-btn {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+        }
+
+        .course-btn {
+            background: linear-gradient(45deg, #43a047, #2e7d32);
+        }
+
+        .button span {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            color: #333;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .title {
+                font-size: 2rem;
+            }
+            .button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">北山学院网络安全</h1>
+            <p class="subtitle">培养未来的网络安全精英，守护数字时代的安全</p>
+        </header>
+
+        <div class="buttons-container">
+            <button class="button team-btn" onclick="showModal('team')">
+                团队介绍
+                <span>了解我们专业的讲师团队</span>
+            </button>
+            <button class="button course-btn" onclick="showModal('course')">
+                线上线下课程简介
+                <span>探索我们的特色课程体系</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 团队介绍模态框 -->
+    <div id="teamModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('team')">&times;</span>
+            <h2 style="margin-bottom: 1rem">专业团队介绍</h2>
+            <p>我们的团队由业内顶尖的网络安全专家组成，包括：</p>
+            <ul style="margin: 1rem 0 1rem 2rem; text-align: left">
+                <li>资深渗透测试工程师</li>
+                <li>网络安全研究员</li>
+                <li>安全开发工程师</li>
+                <li>安全运营专家</li>
+            </ul>
+            <p>每位团队成员都拥有丰富的实战经验和教学经验。</p>
+        </div>
+    </div>
+
+    <!-- 课程简介模态框 -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('course')">&times;</span>
+            <h2 style="margin-bottom: 1rem">课程体系介绍</h2>
+            <p>我们提供全面的网络安全课程：</p>
+            <ul style="margin: 1rem 0 1rem 2rem; text-align: left">
+                <li>网络安全基础课程</li>
+                <li>渗透测试实战班</li>
+                <li>安全开发进阶课程</li>
+                <li>CTF竞赛培训</li>
+            </ul>
+            <p>线上线下相结合，理论实践并重。</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 北山学院网络安全 版权所有</p>
+    </footer>
+
+    <script>
+        function showModal(type) {
+            const modal = document.getElementById(type + 'Modal');
+            modal.style.display = 'flex';
+        }
+
+        function closeModal(type) {
+            const modal = document.getElementById(type + 'Modal');
+            modal.style.display = 'none';
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
