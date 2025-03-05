@@ -7,10 +7,11 @@
 </head>
 <body>
     <h1>PostMessage Demo</h1>
-   <iframe id="receiver" src="https://docs.qq.com/scenario/wework-quick-login.html?redirect_uri=https%3A%2F%2Fdoc.weixin.qq.com%2Fhome%2Frecent&open_id_gray=1&code_gray=1" width="300" height="200"></iframe>
+   <iframe src="https://docs.qq.com/scenario/wework-quick-login.html?redirect_uri=https%3A%2F%2Fdoc.weixin.qq.com%2Fhome%2Frecent&open_id_gray=1&code_gray=1" width="300" height="200"></iframe>
    <script>
-        const receiver = document.getElementById('receiver').contentWindow;
-        setTimeout('receiver.postMessage("test", "*")',3000);
+        window.addEventListener('message', (event) => {
+                document.body.innerHTML = 'Received message from parent:'+event.data;
+        });
     </script>
 </body>
 </html>
