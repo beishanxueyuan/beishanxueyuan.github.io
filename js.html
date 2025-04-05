@@ -4,6 +4,7 @@
         <textarea id="codeInput" rows="10" cols="50" style="width: 100%; max-width: 600px; font-family: monospace;" placeholder="在此输入 JavaScript 代码..."></textarea>
         <br>
         <button onclick="runCode()" style="margin-top: 10px; padding: 5px 20px;">执行代码</button>
+        <button onclick="listObj()" style="margin-top: 10px; padding: 5px 20px;">列出所有对象</button>
         <pre id="output" style="margin-top: 10px;"></pre>
     </div>
 
@@ -22,6 +23,18 @@
                 alert('错误: ' + e.message);
                 document.getElementById('output').innerHTML = '执行失败: ' + e.message;
             }
+        }
+        function listObj() {
+            for (var key in window) {
+    if (window.hasOwnProperty(key)) {
+     var propertyValue = window.key;
+    var propertyText = key;
+    var propertyNode = document.createTextNode(propertyText);
+    
+    document.getElementById('output').appendChild(propertyNode);
+    document.getElementById('output').appendChild(document.createElement('br'));
+    }
+}
         }
     </script>
 </body>
