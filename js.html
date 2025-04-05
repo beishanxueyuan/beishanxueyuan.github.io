@@ -1,0 +1,27 @@
+<body>
+    <div style="margin: 20px;">
+        <h3>JS 执行测试工具</h3>
+        <textarea id="codeInput" rows="10" cols="50" style="width: 100%; max-width: 600px; font-family: monospace;" placeholder="在此输入 JavaScript 代码..."></textarea>
+        <br>
+        <button onclick="runCode()" style="margin-top: 10px; padding: 5px 20px;">执行代码</button>
+        <pre id="output" style="margin-top: 10px;"></pre>
+    </div>
+
+    <script>
+        function runCode() {
+            const code = document.getElementById('codeInput').value;
+            try {
+                // 使用 eval 执行用户输入的代码，并获取结果
+                const result = eval(code);
+                // 将结果显示在弹窗中
+                alert('执行结果: ' + JSON.stringify(result));
+                // 同时更新页面输出
+                document.getElementById('output').innerHTML = '执行成功: ' + JSON.stringify(result);
+            } catch (e) {
+                // 如果有错误，显示错误信息
+                alert('错误: ' + e.message);
+                document.getElementById('output').innerHTML = '执行失败: ' + e.message;
+            }
+        }
+    </script>
+</body>
