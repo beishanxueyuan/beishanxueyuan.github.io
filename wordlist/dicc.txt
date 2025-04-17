@@ -1,3 +1,4 @@
+/ueditor/php/config.json
 proxy.stream
 hystrix.stream
 /swagger
