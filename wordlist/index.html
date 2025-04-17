@@ -130,6 +130,15 @@
             transform: scale(1.02);
         }
 
+        .edit-btn {
+            background: linear-gradient(90deg, #7c3aed, #9f67fa);
+        }
+
+        .edit-btn:hover {
+            background: linear-gradient(90deg, #6d28d9, #7c3aed);
+            transform: scale(1.02);
+        }
+
         .admin-link {
             text-align: center;
             margin-top: 40px;
@@ -273,11 +282,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td data-label="文件名">test.txt</td>
+                    <td data-label="文件名">dicc.txt</td>
                     <td data-label="字典类型">目录字典</td>
                     <td data-label="操作" class="actions">
                         <a href="https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/dicc.txt" target="_blank" class="view-btn">查看</a>
-                        <button onclick="downloadFile('https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/test.txt', 'test.txt')" class="download-btn">下载</button>
+                        <button onclick="downloadFile('https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/dicc.txt', 'test.txt')" class="download-btn">下载</button>
+                        <a href="https://github.com/beishanxueyuan/beishanxueyuan.github.io/edit/main/wordlist/dicc.txt" target="_blank" class="edit-btn">编辑</a>
                     </td>
                 </tr>
                 <tr>
@@ -286,6 +296,7 @@
                     <td data-label="操作" class="actions">
                         <a href="https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample1.txt" target="_blank" class="view-btn">查看</a>
                         <button onclick="downloadFile('https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample1.txt', 'sample1.txt')" class="download-btn">下载</button>
+                        <a href="https://github.com/beishanxueyuan/beishanxueyuan.github.io/edit/main/wordlist/sample1.txt" target="_blank" class="edit-btn">编辑</a>
                     </td>
                 </tr>
                 <tr>
@@ -294,6 +305,7 @@
                     <td data-label="操作" class="actions">
                         <a href="https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample2.txt" target="_blank" class="view-btn">查看</a>
                         <button onclick="downloadFile('https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample2.txt', 'sample2.txt')" class="download-btn">下载</button>
+                        <a href="https://github.com/beishanxueyuan/beishanxueyuan.github.io/edit/main/wordlist/sample2.txt" target="_blank" class="edit-btn">编辑</a>
                     </td>
                 </tr>
             </tbody>
