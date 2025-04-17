@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordlist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #f4f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #1f2a44;
+        }
+
+        header {
+            width: 100%;
+            background: #ffffff;
+            padding: 20px 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #1f2a44;
+        }
+
+        .content {
+            width: 100%;
+            max-width: 1280px;
+            padding: 40px;
+            margin: 20px 0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #1f2a44;
+        }
+
+        .file-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .file-table th, .file-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .file-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+            font-size: 1.1em;
+        }
+
+        .file-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .file-table tr:hover {
+            background: #f1f5f9;
+        }
+
+        .file-table .actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .file-table a, .file-table button {
+            text-decoration: none;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+
+        .view-btn:hover {
+            background: linear-gradient(90deg, #1d4ed8, #2563eb);
+            transform: scale(1.02);
+        }
+
+        .download-btn {
+            background: linear-gradient(90deg, #059669, #10b981);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(90deg, #047857, #059669);
+            transform: scale(1.02);
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .admin-link a {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            background: linear-gradient(90deg, #d97706, #f59e0b);
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .admin-link a:hover {
+            background: linear-gradient(90deg, #b45309, #d97706);
+            transform: scale(1.02);
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-top: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .file-table th, .file-table td {
+                padding: 12px;
+            }
+
+            .file-table a, .file-table button {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 1.2em;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .file-table {
+                display: block;
+            }
+
+            .file-table thead {
+                display: none;
+            }
+
+            .file-table tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+            }
+
+            .file-table td {
+                display: block;
+                text-align: left;
+                padding: 10px;
+                border: none;
+            }
+
+            .file-table td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                display: block;
+                margin-bottom: 5px;
+                color: #374151;
+            }
+
+            .file-table .actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .admin-link a {
+                font-size: 1.1em;
+                padding: 12px 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 15px;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .file-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">北山学院字典下载平台</div>
+    </header>
+    <div class="content">
+        <h1>Wordlist</h1>
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>文件名</th>
+                    <th>字典类型</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="文件名">test.txt</td>
+                    <td data-label="字典类型">目录字典</td>
+                    <td data-label="操作" class="actions">
+                        <a href="https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/test.txt" target="_blank" class="view-btn">查看</a>
+                        <button onclick="downloadFile('https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/test.txt', 'test.txt')" class="download-btn">下载</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-label="文件名">sample1.txt</td>
+                    <td data-label="字典类型">参数字典</td>
+                    <td data-label="操作" class="actions">
+                        <a href="https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample1.txt" target="_blank" class="view-btn">查看</a>
+                        <button onclick="downloadFile('https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample1.txt', 'sample1.txt')" class="download-btn">下载</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-label="文件名">sample2.txt</td>
+                    <td data-label="字典类型">子域名字典</td>
+                    <td data-label="操作" class="actions">
+                        <a href="https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample2.txt" target="_blank" class="view-btn">查看</a>
+                        <button onclick="downloadFile('https://raw.githubusercontent.com/beishanxueyuan/beishanxueyuan.github.io/refs/heads/main/wordlist/sample2.txt', 'sample2.txt')" class="download-btn">下载</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="admin-link">
+            <a href="https://github.com/beishanxueyuan/beishanxueyuan.github.io/tree/main/wordlist" target="_blank">访问后台管理</a>
+        </div>
+    </div>
+    <footer>
+        © 2024 成都北山创安信息技术有限公司. 保留所有权利.
+    </footer>
+    <script>
+        async function downloadFile(url, fileName) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const blob = await response.blob();
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+            } catch (error) {
+                console.error('Download failed:', error);
+                alert('下载失败，请尝试查看文件或检查网络连接');
+            }
+        }
+    </script>
+</body>
+</html>
