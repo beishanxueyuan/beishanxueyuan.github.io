@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码字典生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        label {
+            width: 120px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .options {
+            margin: 15px 0;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>密码字典生成器</h2>
+        <div id="input-container">
+            <div class="input-group">
+                <label>字符串</label>
+                <input type="text" placeholder="如：muzihan,zhangsan" data-type="string">
+            </div>
+            <div class="input-group">
+                <label>数字</label>
+                <input type="text" placeholder="如：1990,20230101" data-type="number">
+            </div>
+        </div>
+        <div class="options">
+            <label><input type="checkbox" id="capitalize" checked> 首字母大写</label>
+        </div>
+        <button onclick="generateDictionary()">生成字典</button>
+        <button onclick="copyToClipboard()">复制到剪贴板</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        // 种子数据
+        const seeds = {
+            year: {
+                values: ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"],
+                variable: false
+            },
+            special_letter: {
+                values: ["!", "@", "#", "$", "%", "&", "*", "_", "+", "."],
+                variable: false
+            },
+            keyboard_walk: {
+                values: ["qwe123", "asd123", "zxc123", "123456", "abcdef", "qwerty", "uiop", "asdfgh", "zxcvbn", "1qaz"],
+                variable: true
+            },
+            common_number: {
+                values: [
+                    "123", "520", "1314", "666", "888", "10086", "10010", "10000", "123456", "111111", "000000", "12345", "12345678",
+                    "1122", "112233", "5201314", "1314520",
+                    "1", "11", "111", "1111", "11111", "111111",
+                    "8", "88", "888", "8888", "88888", "888888",
+                    "0", "00", "000", "0000", "00000", "000000",
+                    "6", "66", "666", "6666", "66666", "666666"
+                ],
+                variable: false
+            },
+            chinese_surnames: {
+                values: ["wang", "li", "zhang", "chen", "yang", "huang", "zhao", "wu", "zhou", "xu", "sun", "ma"],
+                variable: true
+            }
+        };
+
+        // 中国常见弱口令
+        const commonWeakPasswords = [
+            "123456", "password", "12345678", "qwerty", "abc123", "111111", "123123",
+            "admin", "123456789", "666666", "888888", "5201314", "woaini", "qazwsx",
+            "1q2w3e", "a123456", "123456a", "123qwe", "abcd1234", "admin123",
+            "1234567", "letmein", "welcome", "monkey", "dragon"
+        ];
+
+        // 字符串输入的组合模式
+        const stringCombinationPatterns = [
+            // 四部分组合
+            ["string", "special_letter", "common_number", "special_letter"],
+            ["string", "common_number", "special_letter", "special_letter"],
+            ["special_letter", "string", "common_number", "special_letter"],
+            ["special_letter", "common_number", "string", "special_letter"],
+            ["string", "special_letter", "year", "special_letter"],
+            ["string", "year", "special_letter", "special_letter"],
+            ["special_letter", "string", "year", "special_letter"],
+            ["special_letter", "year", "string", "special_letter"],
+            ["string", "special_letter", "keyboard_walk", "special_letter"],
+            ["string", "keyboard_walk", "special_letter", "special_letter"],
+            ["special_letter", "string", "keyboard_walk", "special_letter"],
+            ["special_letter", "keyboard_walk", "string", "special_letter"],
+            // 三部分组合
+            ["string", "special_letter", "common_number"],
+            ["string", "common_number", "special_letter"],
+            ["special_letter", "string", "common_number"],
+            ["common_number", "string", "special_letter"],
+            ["string", "special_letter", "year"],
+            ["string", "year", "special_letter"],
+            ["special_letter", "string", "year"],
+            ["year", "string", "special_letter"],
+            ["string", "special_letter", "keyboard_walk"],
+            ["string", "keyboard_walk", "special_letter"],
+            ["special_letter", "string", "keyboard_walk"],
+            ["keyboard_walk", "string", "special_letter"],
+            // 两部分组合
+            ["string", "year"],
+            ["year", "string"],
+            ["string", "keyboard_walk"],
+            ["keyboard_walk", "string"],
+            ["string", "special_letter"],
+            ["special_letter", "string"],
+            ["string", "common_number"],
+            ["common_number", "string"],
+            // 单部分
+            ["string"],["common_number"]
+        ];
+
+        // chinese_surnames 与种子数据的组合模式
+        const surnameCombinationPatterns = [
+            ["chinese_surnames", "special_letter", "common_number"],
+            ["chinese_surnames", "common_number", "special_letter"],
+            ["special_letter", "chinese_surnames", "common_number"],
+            ["common_number", "chinese_surnames", "special_letter"],
+            ["chinese_surnames", "special_letter", "year"],
+            ["chinese_surnames", "year", "special_letter"],
+            ["special_letter", "chinese_surnames", "year"],
+            ["year", "chinese_surnames", "special_letter"],
+            ["chinese_surnames", "special_letter", "keyboard_walk"],
+            ["chinese_surnames", "keyboard_walk", "special_letter"],
+            ["special_letter", "chinese_surnames", "keyboard_walk"],
+            ["keyboard_walk", "chinese_surnames", "special_letter"],
+            // 两部分组合
+            ["chinese_surnames", "year"],
+            ["year", "chinese_surnames"],
+            ["chinese_surnames", "keyboard_walk"],
+            ["keyboard_walk", "chinese_surnames"],
+            ["chinese_surnames", "special_letter"],
+            ["special_letter", "chinese_surnames"],
+            ["chinese_surnames", "common_number"],
+            ["common_number", "chinese_surnames"],
+            // 单部分
+            ["chinese_surnames"]
+        ];
+
+        // 获取输入值的变形
+        function getVariedInputs(v) {
+            let lower = v.toLowerCase();
+            let upper = v.toUpperCase();
+            let firstUpper = v.charAt(0).toUpperCase() + v.slice(1).toLowerCase();
+            return [lower, upper, firstUpper].filter((value, index, self) => self.indexOf(value) === index);
+        }
+
+        // 获取字符串输入值
+        function getStringInputs() {
+            const input = document.querySelector(`input[data-type="string"]`);
+            if (!input || !input.value.trim()) return [];
+            return input.value.split(",").map(v => v.trim()).flatMap(v => getVariedInputs(v));
+        }
+
+        // 获取数字输入值并合并到 common_number
+        function getCommonNumber() {
+            const input = document.querySelector(`input[data-type="number"]`);
+            let customNumbers = input && input.value.trim() ? input.value.split(",").map(v => v.trim()).filter(v => v) : [];
+            return [...seeds.common_number.values, ...customNumbers];
+        }
+
+        // 获取种子变形
+        function getVariedSeeds(seedType) {
+            let baseValues = seeds[seedType]?.values || [];
+            if (!seeds[seedType]?.variable) {
+                return baseValues;
+            }
+            let varied = [];
+            baseValues.forEach(value => {
+                varied.push(value.toLowerCase());
+                varied.push(value.toUpperCase());
+                if (value.length > 0) {
+                    varied.push(value.charAt(0).toUpperCase() + value.slice(1).toLowerCase());
+                }
+            });
+            return [...new Set(varied)];
+        }
+
+        // 笛卡尔积
+        function cartesianProductOf(...arrays) {
+            return arrays.reduce((a, b) => a.flatMap(x => b.map(y => [...x, y])), [[]]);
+        }
+
+        // 导出为 TXT 文件
+        function exportToTxt(content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'password_dictionary.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('密码字典已导出为 password_dictionary.txt');
+        }
+
+        // 生成字典
+        function generateDictionary() {
+            const capitalize = document.getElementById("capitalize").checked;
+            let allCombinations = new Set();
+
+            try {
+                // 获取字符串输入
+                let stringInputs = getStringInputs();
+                if (stringInputs.length === 0) {
+                    const outputText = "请至少输入一个字符串！\n\n常见弱口令：\n" + commonWeakPasswords.join("\n");
+                    document.getElementById("output").textContent = outputText;
+                    return;
+                }
+
+                // 获取合并后的 common_number
+                let commonNumberValues = getCommonNumber();
+
+                // 处理字符串输入的组合
+                const stringPatterns = stringCombinationPatterns.map(pattern => {
+                    return pattern.map(part => {
+                        if (part === "common_number") {
+                            return commonNumberValues;
+                        } else if (part === "string") {
+                            return stringInputs;
+                        } else {
+                            return getVariedSeeds(part);
+                        }
+                    });
+                });
+
+                // 处理 chinese_surnames 与种子数据的组合
+                const surnamePatterns = surnameCombinationPatterns.map(pattern => {
+                    return pattern.map(part => {
+                        if (part === "common_number") {
+                            return commonNumberValues;
+                        } else {
+                            return getVariedSeeds(part);
+                        }
+                    });
+                });
+
+                // 生成字符串输入的组合
+                stringPatterns.forEach(partsValues => {
+                    let products = cartesianProductOf(...partsValues);
+                    products.forEach(prod => {
+                        let password = prod.join('');
+                        allCombinations.add(password);
+                    });
+                });
+
+                // 生成 chinese_surnames 的组合
+                surnamePatterns.forEach(partsValues => {
+                    let products = cartesianProductOf(...partsValues);
+                    products.forEach(prod => {
+                        let password = prod.join('');
+                        allCombinations.add(password);
+                    });
+                });
+
+                // 添加常见弱口令
+                commonWeakPasswords.forEach(p => allCombinations.add(p));
+
+                // 转换为输出文本
+                const outputText = Array.from(allCombinations).join("\n");
+
+                // 如果组合数量过大，尝试导出为文件
+                if (allCombinations.size > 100000) {
+                    throw new Error("组合数量过多，将导出为文件");
+                }
+
+                // 显示结果
+                document.getElementById("output").textContent = outputText;
+            } catch (error) {
+                console.error('生成字典时出错:', error);
+                const outputText = Array.from(allCombinations).join("\n") || "生成失败，尝试导出常见弱口令\n\n" + commonWeakPasswords.join("\n");
+                exportToTxt(outputText);
+                document.getElementById("output").textContent = "生成失败，已导出为 password_dictionary.txt";
+            }
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard() {
+            const output = document.getElementById("output");
+            const text = output.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("已复制到剪贴板");
+            }).catch(err => {
+                console.error('无法复制: ', err);
+                alert("复制失败，请手动复制或导出文件");
+            });
+        }
+    </script>
+</body>
+</html>
