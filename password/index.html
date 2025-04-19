@@ -6,17 +6,35 @@
     <title>密码字典生成器</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f7fa;
+            color: #333;
         }
         .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+        }
+        .main-content {
+            flex: 7;
             background-color: #fff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar {
+            flex: 3;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+            position: sticky;
+            top: 20px;
         }
         .input-group {
             margin-bottom: 15px;
@@ -25,61 +43,161 @@
         }
         label {
             width: 120px;
-            font-weight: bold;
+            font-weight: 600;
+            color: #444;
         }
-        input[type="text"] {
+        input[type="text"], textarea {
             flex: 1;
             padding: 10px;
-            margin-right: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 1px solid #dfe1e5;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
         }
         button {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
             margin: 5px;
         }
         button:hover {
             background-color: #0056b3;
         }
-        .options {
+        .options, .seed-info {
             margin: 15px 0;
+        }
+        .seed-info details {
+            margin-bottom: 10px;
+        }
+        .seed-info summary {
+            cursor: pointer;
+            padding: 5px;
+            font-weight: 600;
+        }
+        .pattern-options details {
+            margin-bottom: 10px;
+        }
+        .pattern-options summary {
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        .pattern-options summary:hover {
+            background-color: #f1f3f5;
+        }
+        .pattern-list label {
+            display: flex;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+        .pattern-list label:hover {
+            /* background-color: #f1f3f5; */
+        }
+        .pattern-list input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .select-all-label {
+            display: flex;
+            padding: 8px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .select-all-label input[type="checkbox"] {
+            margin-right: 8px;
         }
         #output {
             margin-top: 20px;
             padding: 15px;
             background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #dfe1e5;
+            border-radius: 8px;
             white-space: pre-wrap;
             max-height: 400px;
             overflow-y: auto;
+            font-size: 14px;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        h2, h3 {
+            color: #222;
+            margin-top: 0;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                position: static;
+                max-height: none;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>密码字典生成器</h2>
-        <div id="input-container">
-            <div class="input-group">
-                <label>字符串</label>
-                <input type="text" placeholder="如：muzihan,zhangsan" data-type="string">
+        <div class="main-content">
+            <h2>密码字典生成器</h2>
+            <div id="input-container">
+                <div class="input-group">
+                    <label>字符串</label>
+                    <input type="text" placeholder="如：zhangsan,admin,zhang" data-type="string">
+                </div>
+                <div class="input-group">
+                    <label>数字</label>
+                    <input type="text" placeholder="如：1990,20230101" data-type="number">
+                </div>
             </div>
             <div class="input-group">
-                <label>数字</label>
-                <input type="text" placeholder="如：1990,20230101" data-type="number">
+                <label>自定义组合模式</label>
+                <textarea id="custom-pattern" placeholder="输入自定义组合模式，每行一个，如：string,special_letter,year"></textarea>
+            </div>
+            <div class="seed-info">
+                <h3>种子数据说明</h3>
+                <details>
+                    <summary>year（年份）</summary>
+                    <p>包含2015至2026年的年份字符串，用于生成与年份相关的密码组合。</p>
+                </details>
+                <details>
+                    <summary>special_letter（特殊字符）</summary>
+                    <p>包含常见特殊字符，如 !, @, # 等，用于增强密码复杂性。</p>
+                </details>
+                <details>
+                    <summary>keyboard_walk（键盘路径）</summary>
+                    <p>包含键盘上常见的连续按键组合，如 qwe123, asd123 等，模拟用户习惯输入的简单模式。支持大小写变形。</p>
+                </details>
+                <details>
+                    <summary>common_number（常见数字）</summary>
+                    <p>包含常见的数字组合，如 123, 520, 1314 等，常用于弱密码。用户输入的数字会追加到此集合中。</p>
+                </details>
+            </div>
+            <button onclick="generateDictionary()">生成字典</button>
+            <button onclick="copyToClipboard()">复制到剪贴板</button>
+            <div id="output"></div>
+        </div>
+        <div class="sidebar">
+            <div class="pattern-options">
+                <h3>选择组合模式</h3>
+                <div id="pattern-sections">
+                    <!-- Patterns will be dynamically inserted here -->
+                </div>
             </div>
         </div>
-        <div class="options">
-            <label><input type="checkbox" id="capitalize" checked> 首字母大写</label>
-        </div>
-        <button onclick="generateDictionary()">生成字典</button>
-        <button onclick="copyToClipboard()">复制到剪贴板</button>
-        <div id="output"></div>
     </div>
 
     <script>
@@ -94,7 +212,7 @@
                 variable: false
             },
             keyboard_walk: {
-                values: ["qwe123", "asd123", "zxc123", "123456", "abcdef", "qwerty", "uiop", "asdfgh", "zxcvbn", "1qaz"],
+                values: ["test", "dev", "web", "qwe123", "asd123", "zxc123", "123456", "abcdef", "qwerty", "uiop", "asdfgh", "zxcvbn", "1qaz"],
                 variable: true
             },
             common_number: {
@@ -107,10 +225,6 @@
                     "6", "66", "666", "6666", "66666", "666666"
                 ],
                 variable: false
-            },
-            chinese_surnames: {
-                values: ["wang", "li", "zhang", "chen", "yang", "huang", "zhao", "wu", "zhou", "xu", "sun", "ma"],
-                variable: true
             }
         };
 
@@ -122,9 +236,56 @@
             "1234567", "letmein", "welcome", "monkey", "dragon"
         ];
 
-        // 字符串输入的组合模式
+        // 生成不重复种子类型的组合模式
+        function generateCombinations(seedTypes, length) {
+            function permute(arr) {
+                if (arr.length <= 1) return [arr];
+                const results = [];
+                for (let i = 0; i < arr.length; i++) {
+                    const current = arr[i];
+                    const remaining = arr.slice(0, i).concat(arr.slice(i + 1));
+                    const perms = permute(remaining);
+                    for (const perm of perms) {
+                        results.push([current, ...perm]);
+                    }
+                }
+                return results;
+            }
+
+            function combine(arr, k) {
+                const results = [];
+                function backtrack(start, current) {
+                    if (current.length === k) {
+                        results.push([...current]);
+                        return;
+                    }
+                    for (let i = start; i < arr.length; i++) {
+                        backtrack(i + 1, [...current, arr[i]]);
+                    }
+                }
+                backtrack(0, []);
+                return results;
+            }
+
+            // 选择 k 个不同种子类型
+            const combinations = combine(seedTypes, length);
+            // 为每组种子类型生成所有排列
+            const results = [];
+            for (const combo of combinations) {
+                results.push(...permute(combo));
+            }
+            return results;
+        }
+
+        // 可用种子类型
+        const seedTypes = ["string", "special_letter", "common_number", "year", "keyboard_walk"];
+
+        // 生成一到三部分的组合模式（无重复种子类型），限制四部分的模式数量
         const stringCombinationPatterns = [
-            // 四部分组合
+            ...generateCombinations(seedTypes, 1), // 单部分：5种
+            ...generateCombinations(seedTypes, 2), // 两部分：20种
+            ...generateCombinations(seedTypes, 3), // 三部分：60种
+            // 四部分：保留原有模式，默认不选
             ["string", "special_letter", "common_number", "special_letter"],
             ["string", "common_number", "special_letter", "special_letter"],
             ["special_letter", "string", "common_number", "special_letter"],
@@ -136,73 +297,101 @@
             ["string", "special_letter", "keyboard_walk", "special_letter"],
             ["string", "keyboard_walk", "special_letter", "special_letter"],
             ["special_letter", "string", "keyboard_walk", "special_letter"],
-            ["special_letter", "keyboard_walk", "string", "special_letter"],
-            // 三部分组合
-            ["string", "special_letter", "common_number"],
-            ["string", "common_number", "special_letter"],
-            ["special_letter", "string", "common_number"],
-            ["common_number", "string", "special_letter"],
-            ["string", "special_letter", "year"],
-            ["string", "year", "special_letter"],
-            ["special_letter", "string", "year"],
-            ["year", "string", "special_letter"],
-            ["string", "special_letter", "keyboard_walk"],
-            ["string", "keyboard_walk", "special_letter"],
-            ["special_letter", "string", "keyboard_walk"],
-            ["keyboard_walk", "string", "special_letter"],
-            // 两部分组合
-            ["string", "year"],
-            ["year", "string"],
-            ["string", "keyboard_walk"],
-            ["keyboard_walk", "string"],
-            ["string", "special_letter"],
-            ["special_letter", "string"],
-            ["string", "common_number"],
-            ["common_number", "string"],
-            // 单部分
-            ["string"],["common_number"]
+            ["special_letter", "keyboard_walk", "string", "special_letter"]
         ];
 
-        // chinese_surnames 与种子数据的组合模式
-        const surnameCombinationPatterns = [
-            ["chinese_surnames", "special_letter", "common_number"],
-            ["chinese_surnames", "common_number", "special_letter"],
-            ["special_letter", "chinese_surnames", "common_number"],
-            ["common_number", "chinese_surnames", "special_letter"],
-            ["chinese_surnames", "special_letter", "year"],
-            ["chinese_surnames", "year", "special_letter"],
-            ["special_letter", "chinese_surnames", "year"],
-            ["year", "chinese_surnames", "special_letter"],
-            ["chinese_surnames", "special_letter", "keyboard_walk"],
-            ["chinese_surnames", "keyboard_walk", "special_letter"],
-            ["special_letter", "chinese_surnames", "keyboard_walk"],
-            ["keyboard_walk", "chinese_surnames", "special_letter"],
-            // 两部分组合
-            ["chinese_surnames", "year"],
-            ["year", "chinese_surnames"],
-            ["chinese_surnames", "keyboard_walk"],
-            ["keyboard_walk", "chinese_surnames"],
-            ["chinese_surnames", "special_letter"],
-            ["special_letter", "chinese_surnames"],
-            ["chinese_surnames", "common_number"],
-            ["common_number", "chinese_surnames"],
-            // 单部分
-            ["chinese_surnames"]
-        ];
+        // 动态生成组合模式选项
+        function populatePatternList() {
+            const patternSections = document.getElementById("pattern-sections");
+            patternSections.innerHTML = "";
 
-        // 获取输入值的变形
-        function getVariedInputs(v) {
-            let lower = v.toLowerCase();
-            let upper = v.toUpperCase();
-            let firstUpper = v.charAt(0).toUpperCase() + v.slice(1).toLowerCase();
-            return [lower, upper, firstUpper].filter((value, index, self) => self.indexOf(value) === index);
+            // Group patterns by part count
+            const groupedPatterns = {
+                four_parts: [],
+                three_parts: [],
+                two_parts: [],
+                single_part: []
+            };
+
+            stringCombinationPatterns.forEach((pattern, index) => {
+                if (pattern.length === 4) {
+                    groupedPatterns.four_parts.push({ index, pattern });
+                } else if (pattern.length === 3) {
+                    groupedPatterns.three_parts.push({ index, pattern });
+                } else if (pattern.length === 2) {
+                    groupedPatterns.two_parts.push({ index, pattern });
+                } else {
+                    groupedPatterns.single_part.push({ index, pattern });
+                }
+            });
+
+            // Create sections for each part count
+            const sectionTitles = {
+                four_parts: "四部分组合",
+                three_parts: "三部分组合",
+                two_parts: "两部分组合",
+                single_part: "单部分组合"
+            };
+
+            Object.keys(groupedPatterns).forEach(section => {
+                if (groupedPatterns[section].length === 0) return;
+
+                const details = document.createElement("details");
+                details.open = true; // Default open for visibility
+                const summary = document.createElement("summary");
+                summary.textContent = sectionTitles[section];
+                details.appendChild(summary);
+
+                const list = document.createElement("div");
+                list.className = "pattern-list";
+
+                // Add Select All checkbox
+                const selectAllLabel = document.createElement("label");
+                selectAllLabel.className = "select-all-label";
+                const selectAllCheckbox = document.createElement("input");
+                selectAllCheckbox.type = "checkbox";
+                selectAllCheckbox.checked = section !== "four_parts"; // Select All checked for 3, 2, 1 parts
+                selectAllCheckbox.addEventListener("change", (e) => {
+                    const checkboxes = list.querySelectorAll('input[name="pattern"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = e.target.checked;
+                    });
+                });
+                selectAllLabel.appendChild(selectAllCheckbox);
+                selectAllLabel.appendChild(document.createTextNode(" 全选"));
+                list.appendChild(selectAllLabel);
+
+                groupedPatterns[section].forEach(({ index, pattern }) => {
+                    const label = document.createElement("label");
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "pattern";
+                    checkbox.value = index;
+                    checkbox.checked = section !== "four_parts"; // Check 3, 2, 1 parts by default
+                    label.appendChild(checkbox);
+                    label.appendChild(document.createTextNode(` ${pattern.join(",")}`));
+                    list.appendChild(label);
+
+                    // Update Select All checkbox state when individual checkboxes change
+                    checkbox.addEventListener("change", () => {
+                        const checkboxes = list.querySelectorAll('input[name="pattern"]');
+                        selectAllCheckbox.checked = Array.from(checkboxes).every(cb => cb.checked);
+                    });
+                });
+
+                details.appendChild(list);
+                patternSections.appendChild(details);
+            });
         }
 
-        // 获取字符串输入值
+        // 页面加载时生成组合模式选项
+        window.onload = populatePatternList;
+
+        // 获取输入值（移除大小写变形）
         function getStringInputs() {
             const input = document.querySelector(`input[data-type="string"]`);
             if (!input || !input.value.trim()) return [];
-            return input.value.split(",").map(v => v.trim()).flatMap(v => getVariedInputs(v));
+            return input.value.split(",").map(v => v.trim()).filter(v => v);
         }
 
         // 获取数字输入值并合并到 common_number
@@ -212,8 +401,8 @@
             return [...seeds.common_number.values, ...customNumbers];
         }
 
-        // 获取种子变形
-        function getVariedSeeds(seedType) {
+        // 获取种子值（仅对 keyboard_walk 应用大小写变形）
+        function getSeedValues(seedType) {
             let baseValues = seeds[seedType]?.values || [];
             if (!seeds[seedType]?.variable) {
                 return baseValues;
@@ -248,10 +437,19 @@
             alert('密码字典已导出为 password_dictionary.txt');
         }
 
+        // 获取自定义组合模式
+        function getCustomPatterns() {
+            const textarea = document.getElementById("custom-pattern");
+            if (!textarea.value.trim()) return [];
+            return textarea.value.split("\n").map(line => {
+                return line.split(",").map(part => part.trim()).filter(part => part);
+            }).filter(pattern => pattern.length > 0);
+        }
+
         // 生成字典
         function generateDictionary() {
-            const capitalize = document.getElementById("capitalize").checked;
-            let allCombinations = new Set();
+            const selectedPatternIndices = Array.from(document.querySelectorAll('input[name="pattern"]:checked')).map(cb => parseInt(cb.value));
+            let allCombinations = [];
 
             try {
                 // 获取字符串输入
@@ -265,56 +463,59 @@
                 // 获取合并后的 common_number
                 let commonNumberValues = getCommonNumber();
 
-                // 处理字符串输入的组合
-                const stringPatterns = stringCombinationPatterns.map(pattern => {
-                    return pattern.map(part => {
-                        if (part === "common_number") {
-                            return commonNumberValues;
-                        } else if (part === "string") {
-                            return stringInputs;
-                        } else {
-                            return getVariedSeeds(part);
-                        }
-                    });
+                // 收集所有启用的组合模式并按部分数分组
+                let patternsByLength = {};
+
+                selectedPatternIndices.forEach(index => {
+                    const pattern = stringCombinationPatterns[index];
+                    patternsByLength[pattern.length] = patternsByLength[pattern.length] || [];
+                    patternsByLength[pattern.length].push(pattern);
                 });
 
-                // 处理 chinese_surnames 与种子数据的组合
-                const surnamePatterns = surnameCombinationPatterns.map(pattern => {
-                    return pattern.map(part => {
-                        if (part === "common_number") {
-                            return commonNumberValues;
-                        } else {
-                            return getVariedSeeds(part);
-                        }
-                    });
+                // 添加自定义组合模式
+                const customPatterns = getCustomPatterns();
+                customPatterns.forEach(pattern => {
+                    patternsByLength[pattern.length] = patternsByLength[pattern.length] || [];
+                    patternsByLength[pattern.length].push(pattern);
                 });
 
-                // 生成字符串输入的组合
-                stringPatterns.forEach(partsValues => {
-                    let products = cartesianProductOf(...partsValues);
-                    products.forEach(prod => {
-                        let password = prod.join('');
-                        allCombinations.add(password);
-                    });
-                });
+                // 确定最大模式长度
+                const maxLength = Math.max(...Object.keys(patternsByLength).map(Number), 1);
 
-                // 生成 chinese_surnames 的组合
-                surnamePatterns.forEach(partsValues => {
-                    let products = cartesianProductOf(...partsValues);
-                    products.forEach(prod => {
-                        let password = prod.join('');
-                        allCombinations.add(password);
-                    });
-                });
+                // 先添加常见弱口令
+                commonWeakPasswords.forEach(p => allCombinations.push(p));
 
-                // 添加常见弱口令
-                commonWeakPasswords.forEach(p => allCombinations.add(p));
+                // 按顺序生成组合：单部分 -> 两部分 -> 三部分 -> 四部分及以上
+                for (let length = 1; length <= maxLength; length++) {
+                    const patterns = patternsByLength[length] || [];
+                    patterns.forEach(pattern => {
+                        const partsValues = pattern.map(part => {
+                            if (part === "common_number") {
+                                return commonNumberValues;
+                            } else if (part === "string") {
+                                return stringInputs;
+                            } else if (seeds[part]) {
+                                return getSeedValues(part);
+                            } else {
+                                return [part];
+                            }
+                        });
+                        let products = cartesianProductOf(...partsValues);
+                        products.forEach(prod => {
+                            let password = prod.join('');
+                            allCombinations.push(password);
+                        });
+                    });
+                }
+
+                // 去重
+                allCombinations = [...new Set(allCombinations)];
 
                 // 转换为输出文本
-                const outputText = Array.from(allCombinations).join("\n");
+                const outputText = allCombinations.join("\n");
 
                 // 如果组合数量过大，尝试导出为文件
-                if (allCombinations.size > 100000) {
+                if (allCombinations.length > 100000) {
                     throw new Error("组合数量过多，将导出为文件");
                 }
 
@@ -322,7 +523,7 @@
                 document.getElementById("output").textContent = outputText;
             } catch (error) {
                 console.error('生成字典时出错:', error);
-                const outputText = Array.from(allCombinations).join("\n") || "生成失败，尝试导出常见弱口令\n\n" + commonWeakPasswords.join("\n");
+                const outputText = allCombinations.join("\n") || "生成失败，尝试导出常见弱口令\n\n" + commonWeakPasswords.join("\n");
                 exportToTxt(outputText);
                 document.getElementById("output").textContent = "生成失败，已导出为 password_dictionary.txt";
             }
