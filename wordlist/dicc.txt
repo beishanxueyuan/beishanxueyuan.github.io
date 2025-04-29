@@ -1,3 +1,4 @@
+xxl-job-admin
 /sc
 /zhsc
 /dp
