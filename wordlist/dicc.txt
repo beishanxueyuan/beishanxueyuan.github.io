@@ -1,6 +1,6 @@
 prod-api/druid
 prod-api
-GNRemote.dll
+Web_sc/login.gn
 xxl-job-admin
 /sc
 /zhsc
