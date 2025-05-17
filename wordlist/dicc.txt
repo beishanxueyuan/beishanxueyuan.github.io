@@ -1,3 +1,5 @@
+prod-api/druid
+prod-api
 GNRemote.dll
 xxl-job-admin
 /sc
