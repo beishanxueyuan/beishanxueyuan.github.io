@@ -1,3 +1,4 @@
+GNRemote.dll
 xxl-job-admin
 /sc
 /zhsc
