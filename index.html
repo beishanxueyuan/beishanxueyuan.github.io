@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北山学院 - 网络安全SRC漏洞挖掘专业培训机构</title>
+    <link href="https://gcore.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://gcore.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 网站图标 -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300F0FF'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E">
+    <!-- 自定义属性 -->
+    <style>
+        :root {
+            --primary: #00F0FF;
+            --primary-dark: #00A0C0;
+            --secondary: #9D4EDD;
+            --secondary-dark: #7E22CE;
+            --accent: #10B981;
+            --accent-dark: #059669;
+            --dark-bg: #0A0E17;
+            --dark-layer: #111827;
+            --dark-card: #1F2937;
+            --dark-border: #374151;
+            --text-primary: #F3F4F6;
+            --text-secondary: #D1D5DB;
+            --input-text: #E5E7EB;
+            --glow-primary: 0 0 10px rgba(0, 240, 255, 0.3);
+            --glow-secondary: 0 0 10px rgba(157, 78, 221, 0.3);
+            --glow-accent: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* 基础样式 */
+        /* 单独减小联系我们区块的上下内边距 */
+        .contact-section {
+            padding-top: 0rem;
+            /* 比其他区块更小的上部内边距 */
+            padding-bottom: 8rem;
+            /* 比其他区块更小的下部内边距 */
+        }
+
+        /* 减小标题下方的间距（原mb-16太大） */
+        .contact-section .text-center.mb-16 {
+            margin-bottom: 1rem;
+            /* 从原16rem（4rem）减小到8rem（2rem） */
+        }
+
+        /* 可选：减小联系我们内部卡片的内边距 */
+        .contact-section .tech-card {
+            padding: 1rem;
+            /* 原p-8（2rem）可减小为p-6（1.5rem） */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-secondary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* 科技感背景 */
+        .tech-pattern {
+            background-image:
+                radial-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                radial-gradient(rgba(157, 78, 221, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            background-attachment: fixed;
+        }
+
+        .digital-rain {
+            position: relative;
+        }
+
+        /* 发光效果 */
+        .glow {
+            box-shadow: var(--glow-primary);
+        }
+
+        .glow-secondary {
+            box-shadow: var(--glow-secondary);
+        }
+
+        .glow-accent {
+            box-shadow: var(--glow-accent);
+        }
+
+        .text-glow {
+            text-shadow: var(--glow-primary);
+        }
+
+        /* 渐变边框 */
+        .gradient-border {
+            position: relative;
+            border-radius: inherit;
+            z-index: 0;
+        }
+
+        .gradient-border::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 粒子效果 */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.6;
+            transition: opacity 2s ease;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .particle-blue {
+            background-color: rgba(0, 240, 255, 0.2);
+            box-shadow: var(--glow-primary);
+        }
+
+        .particle-purple {
+            background-color: rgba(157, 78, 221, 0.2);
+            box-shadow: var(--glow-secondary);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+
+            25% {
+                transform: translateY(-15px) translateX(10px);
+            }
+
+            50% {
+                transform: translateY(-5px) translateX(-15px);
+            }
+
+            75% {
+                transform: translateY(10px) translateX(5px);
+            }
+        }
+
+        /* 滚动动画 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* 按钮样式 */
+        .btn {
+            position: relative;
+            font-weight: 600;
+            padding: 0.8rem 2.2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--dark-bg);
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+
+        .btn-primary::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.6s;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::after {
+            left: 100%;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(0, 240, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+            box-shadow: var(--glow-secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(10, 14, 23, 0.95);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* 卡片样式 (调整) */
+        .tech-card {
+            background-color: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 0.75rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            /* 添加指针光标表示可点击 */
+        }
+
+        .tech-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .tech-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* 数字滚动动画 */
+        .counter {
+            transition: all 2s ease-out;
+        }
+
+        /* 波浪分隔符 */
+        .wave-divider {
+            position: relative;
+            height: 60px;
+            overflow: hidden;
+        }
+
+        .wave-divider::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60'%3E%3Cpath fill='%231F2937' fill-opacity='1' d='M0,32L48,42.7C96,53,192,75,288,74.7C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,53.3C1248,43,1344,21,1392,10.7L1440,0L1440,60L1392,60C1344,60,1248,60,1152,60C1056,60,960,60,864,60C768,60,672,60,576,60C480,60,384,60,288,60C192,60,96,60,48,60L0,60Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-layer);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* 动画延迟类 */
+        .delay-100 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-200 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-300 {
+            transition-delay: 0.3s;
+        }
+
+        /* 轮播图样式 */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 2rem;
+            color: white;
+        }
+
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-control:hover {
+            background: var(--primary);
+            color: var(--dark-bg);
+        }
+
+        .carousel-prev {
+            left: 1rem;
+        }
+
+        .carousel-next {
+            right: 1rem;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 1rem;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            z-index: 5;
+        }
+
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicator.active {
+            background: var(--primary);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* 自定义工具类 */
+        .content-auto {
+            content-visibility: auto;
+        }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .section-padding {
+            padding-top: 4rem;
+            padding-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding-top: 5rem;
+                padding-bottom: 5rem;
+            }
+
+            .carousel-slide {
+                height: 250px;
+            }
+        }
+
+        /* --- 新增的导师网格和模态框样式 --- */
+        .trainer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            /* 自适应列，最小320px */
+            gap: 2rem;
+            /* 卡片间距 */
+            justify-items: center;
+            /* 水平居中 */
+        }
+
+        .trainer-card-content {
+            padding: 1.5rem;
+        }
+
+        .trainer-avatar {
+            width: 100%;
+            height: 200px;
+            /* 统一高度 */
+            object-fit: cover;
+        }
+
+        .trainer-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-top: 0.5rem;
+        }
+
+        .trainer-title {
+            color: var(--primary);
+            /* 或根据类别使用 secondary, accent */
+            margin-bottom: 0.5rem;
+        }
+
+        .trainer-bio {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .trainer-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            /* 圆角标签 */
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .skill-tag.primary {
+            background-color: rgba(0, 240, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .skill-tag.secondary {
+            background-color: rgba(157, 78, 221, 0.1);
+            color: var(--secondary);
+        }
+
+        .skill-tag.accent {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+        }
+
+        .trainer-social {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* 模态框样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 0.75rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .modal-info h3 {
+            font-size: 1.75rem;
+            color: white;
+        }
+
+        .modal-info p {
+            color: var(--text-secondary);
+        }
+
+        .modal-details {
+            color: var(--text-secondary);
+        }
+
+        .modal-details p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body class="tech-pattern">
+    <!-- 粒子背景容器 -->
+    <div id="particle-container" class="fixed inset-0 z-0 pointer-events-none"></div>
+    <!-- 导航栏 -->
+    <header class="navbar fixed top-0 left-0 right-0 z-50 py-4 px-4">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="#home" class="flex items-center gap-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-primary flex items-center justify-center text-dark font-bold text-xl glow">
+                        <i class="fa fa-shield"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-gradient text-glow">北山学院</span>
+                </a>
+                <!-- 桌面端导航 -->
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="#home" class="nav-link text-white hover:text-primary">首页</a>
+                    <a href="#courses" class="nav-link text-white hover:text-primary">课程</a>
+                    <a href="#trainers" class="nav-link text-white hover:text-primary">导师</a>
+                    <a href="#team" class="nav-link text-white hover:text-primary">学员成绩</a>
+                    <a href="#contact" class="nav-link text-white hover:text-primary">联系我们</a>
+                    <a href="#contact" class="btn btn-primary">
+                        <i class="fa fa-rocket"></i> 立即报名
+                    </a>
+                </nav>
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden text-white text-2xl hover:text-primary transition-colors">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu"
+            class="md:hidden hidden mt-4 bg-dark-layer border border-dark-border rounded-lg p-4 absolute left-4 right-4 z-50">
+            <div class="flex flex-col gap-3">
+                <a href="#home" class="py-2 px-4 rounded hover:bg-dark-card hover:text-primary transition-colors">首页</a>
+                <a href="#courses"
+                    class="py-2 px-4 rounded hover:bg-dark-card hover:text-primary transition-colors">课程</a>
+                <a href="#trainers"
+                    class="py-2 px-4 rounded hover:bg-dark-card hover:text-primary transition-colors">导师</a>
+                <a href="#team"
+                    class="py-2 px-4 rounded hover:bg-dark-card hover:text-primary transition-colors">学员成绩</a>
+                <a href="#contact"
+                    class="py-2 px-4 rounded hover:bg-dark-card hover:text-primary transition-colors">联系我们</a>
+                <a href="#contact" class="btn btn-primary mt-2">
+                    <i class="fa fa-rocket"></i> 立即报名
+                </a>
+            </div>
+        </div>
+    </header>
+    <!-- 英雄区域 -->
+    <section id="home" class="min-h-screen flex items-center pt-28 pb-16 relative">
+        <!-- 背景光晕 -->
+        <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
+        <div class="container mx-auto px-4 z-10">
+            <div class="reveal text-center mb-12">
+                <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold text-white leading-tight mb-6">
+                    打造下一代<br>
+                    <span class="text-gradient text-glow">网络安全人才</span>
+                </h1>
+                <p class="text-lg text-text-secondary mb-8 max-w-2xl mx-auto">
+                    我们承诺永远奋斗在漏洞挖掘第一线，为学员提供最新、最实用的案例与知识。
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#courses" class="btn btn-primary">
+                        <i class="fa fa-arrow-right"></i> 了解课程
+                    </a>
+                    <a href="#contact" class="btn btn-outline">
+                        <i class="fa fa-comment"></i> 免费咨询/免费试听
+                    </a>
+                </div>
+            </div>
+            <!-- 轮播图 -->
+            <div class="max-w-5xl mx-auto reveal">
+                <div class="carousel gradient-border">
+                    <div class="carousel-slides">
+                        <div class="carousel-slide">
+                            <img src="./images/轮播1.png" alt="网络安全培训环境">
+                            <div class="carousel-caption">
+                                <h3 class="text-xl font-bold">真实模拟SRC漏洞挖掘环境</h3>
+                                <p>1:1还原企业级漏洞挖掘场景，提升实战能力</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="./images/轮播2.png" alt="学员实战训练">
+                            <div class="carousel-caption">
+                                <h3 class="text-xl font-bold">实战驱动教学模式</h3>
+                                <p>边学边练，快速掌握漏洞挖掘核心技能</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="./images/轮播3.png" alt="就业合作企业">
+                            <div class="carousel-caption">
+                                <h3 class="text-xl font-bold">一线讲师</h3>
+                                <p>保证你接收到的所有知识全部是来自一线安全专家的真实案例</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="./images/轮播4.jpg" alt="就业合作企业">
+                            <div class="carousel-caption">
+                                <h3 class="text-xl font-bold">线下聚会</h3>
+                                <p>定期开展线下聚会活动，凝聚团队合作，分享最新漏洞挖掘技术与经验</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control carousel-prev">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-control carousel-next">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                    <div class="carousel-indicators">
+                        <button class="carousel-indicator active" data-index="0"></button>
+                        <button class="carousel-indicator" data-index="1"></button>
+                        <button class="carousel-indicator" data-index="2"></button>
+                        <button class="carousel-indicator" data-index="3"></button>
+                    </div>
+                </div>
+            </div>
+            <!-- 数据统计 -->
+            <div class="grid grid-cols-3 gap-4 max-w-3xl mx-auto mt-12 reveal delay-200">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary counter">1000+</div>
+                    <div class="text-sm text-text-secondary mt-1">学员总数</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary counter">70%</div>
+                    <div class="text-sm text-text-secondary mt-1">回本率(%)</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary counter">1000000+</div>
+                    <div class="text-sm text-text-secondary mt-1">核心导师平均赏金</div>
+                </div>
+            </div>
+        </div>
+        <!-- 波浪分隔符 -->
+        <div class="wave-divider absolute bottom-0 left-0 right-0"></div>
+    </section>
+    <!-- 特色区域 -->
+    <section class="section-padding bg-dark-layer relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-4">为什么选择我们</h2>
+                <p class="text-lg text-text-secondary max-w-2xl mx-auto">
+                    我们提供行业领先的网络安全培训，帮助学员快速成长为专业安全人才
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="tech-card p-6 reveal-left delay-100">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-primary/20 flex items-center justify-center text-primary text-2xl mb-5">
+                        <i class="fa fa-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">顶尖导师团队</h3>
+                    <p class="text-text-secondary">
+                        我们的导师永远奋斗在第一线，并且长期在各大SRC（众测）榜单上，有庞大的知识储备，全面的漏洞挖掘技术，确保学员获得最有价值、最新的知识与案例。
+                    </p>
+                </div>
+                <div class="tech-card p-6 reveal delay-200">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-secondary/20 flex items-center justify-center text-secondary text-2xl mb-5">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">专业教育水准</h3>
+                    <p class="text-text-secondary">
+                        机构超过四年的授课经验，培养出大量网络安全顶尖人才。不仅在src上，为网络安全领域也输送了大量的专业人才。
+                    </p>
+                </div>
+                <div class="tech-card p-6 reveal-right delay-300">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-accent/20 flex items-center justify-center text-accent text-2xl mb-5">
+                        <i class="fa fa-briefcase"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">完整成熟的售后保障</h3>
+                    <p class="text-text-secondary">
+                        我们承诺一次付费终身学习。为每个学员提供完善的售后保障，包括课程学习、技术支持、就业推荐等。可以与大佬直接沟通，解决学习、实战中的任何问题。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 课程介绍 -->
+    <section id="courses" class="section-padding bg-dark-bg relative">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-4">专业课程体系</h2>
+                <p class="text-lg text-text-secondary max-w-2xl mx-auto">
+                    从零基础到高级专家的完整学习路径，满足不同阶段学习者的需求
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 初级课程 -->
+                <div class="tech-card reveal-left delay-100">
+                    <div class="relative">
+                        <img src="./images/%E5%9F%BA%E7%A1%80%E8%AF%BElogo.png" alt="初级课程"
+                            class="w-full h-56 object-cover">
+                        <div
+                            class="absolute top-4 left-4 bg-primary text-dark px-3 py-1 rounded-full text-sm font-semibold code-font">
+                            初级
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-3">网络安全基础与漏洞挖掘入门</h3>
+                        <div class="flex items-center text-sm text-text-secondary mb-4 gap-4">
+                            <span><i class="fa fa-clock-o mr-1"></i>建议时常：8周</span>
+                            <span><i class="fa fa-signal mr-1"></i> 线上授课</span>
+                        </div>
+                        <p class="text-text-secondary mb-6">
+                            掌握网络安全基础知识，了解常见漏洞类型，学习基础的漏洞挖掘工具和方法，适合零基础学员。进行简单的漏洞挖掘实战，了解漏洞的原理和利用方法。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-primary">工具使用</span>
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-primary">各种常见漏洞原理</span>
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-primary">漏洞挖掘</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-2xl font-bold text-primary">¥300</div>
+                            <a href="#contact" class="btn btn-outline">联系我们</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 中级课程 -->
+                <div class="tech-card reveal delay-200">
+                    <div class="relative">
+                        <img src="./images/src线上logo.png" alt="中级课程" class="w-full h-56 object-cover">
+                        <div
+                            class="absolute top-4 left-4 bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold code-font">
+                            中级
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-3">SRC实战训练</h3>
+                        <div class="flex items-center text-sm text-text-secondary mb-4 gap-4">
+                            <span><i class="fa fa-clock-o mr-1"></i>建议时常：6-12个月</span>
+                            <span><i class="fa fa-signal mr-1"></i> 线上授课</span>
+                        </div>
+                        <p class="text-text-secondary mb-6">
+                            深入学习Web安全漏洞，在真实SRC平台上进行漏洞挖掘实战。我们承诺每一期课程都有更新内容，坚决杜绝100%的重复内容，保证每周两次直播课程（除节假日、护网期间）。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-secondary">案例分析</span>
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-secondary">WAF绕过</span>
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-secondary">云平台漏洞挖掘</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-2xl font-bold text-secondary">¥6800</div>
+                            <a href="https://zxwp.bs-sec.com/"
+                                class="btn btn-outline border-secondary text-secondary hover:bg-secondary/10 hover:shadow-[var(--glow-secondary)]">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 高级课程 -->
+                <div class="tech-card reveal-right delay-300">
+                    <div class="relative">
+                        <img src="./images/线下课程logo.png" alt="高级课程" class="w-full h-56 object-cover">
+                        <div
+                            class="absolute top-4 left-4 bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold code-font">
+                            高级
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-3">高级漏洞挖掘</h3>
+                        <div class="flex items-center text-sm text-text-secondary mb-4 gap-4">
+                            <span><i class="fa fa-clock-o mr-1"></i>建议时常：6-12个月</span>
+                            <span><i class="fa fa-signal mr-1"></i> 线下授课（成都）</span>
+                        </div>
+                        <p class="text-text-secondary mb-6">
+                            掌握高级SRC、众测漏洞挖掘技术，培养全面的网络安全能力，成为漏洞挖掘的安全专家。并且享受团队内部资源与项目。针对实际问题具体解决。每周五进行一次导师总结。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-accent">AI安全</span>
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-accent">SRC高危严重漏洞挖掘</span>
+                            <span class="px-3 py-1 bg-dark-layer rounded-full text-xs text-accent">逆向工程</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-2xl font-bold text-accent">¥20000</div>
+                            <a href="#contact"
+                                class="btn btn-outline border-accent text-accent hover:bg-accent/10 hover:shadow-[var(--glow-accent)]">联系我们</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 导师介绍 (新设计) -->
+    <section id="trainers" class="section-padding bg-dark-layer relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-4">顶尖导师团队</h2>
+                <p class="text-lg text-text-secondary max-w-2xl mx-auto">
+                    由资深网络安全专家组成的导师团队，拥有丰富的实战经验和教学经验
+                </p>
+            </div>
+            <!-- 导师网格 -->
+            <div class="trainer-grid">
+                <!-- 导师1 -->
+                <div class="tech-card reveal" data-modal="modal-zhang">
+                    <img src="./images/%E9%92%9F%E5%8C%97%E5%B1%B1.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">钟北山</h3>
+                        <p class="trainer-title text-primary">北山学院创始人</p>
+                        <p class="trainer-bio">
+                            多家src应急响应中心top10白帽子，累计赏金获得七位数；2023年双十一保卫战军长，累计给多家src提交高危严重漏洞，擅长逻辑漏洞和ai大模型漏洞挖掘。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag primary">漏洞挖掘</span>
+                            <span class="skill-tag primary">安全研究</span>
+                            <span class="skill-tag secondary">企业安全</span>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 导师2 -->
+                <div class="tech-card reveal" data-modal="modal-li">
+                    <img src="./images/陈广.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">陈广</h3>
+                        <p class="trainer-title text-secondary">北山学院技术负责人</p>
+                        <p class="trainer-bio">
+                            tsrc（腾讯安全应急响应中心）总榜第二，多家src（众测）年榜前十，熟练掌握web安全、Android安全、PC客户端安全。擅长SQL注入、XSS、SSRF、RCE等类型漏洞挖掘。紧跟最新的安全技术动态，擅长ai大模型安全、云环境安全漏洞挖掘。累计赏金2000000+。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag secondary">逆向工程</span>
+                            <span class="skill-tag secondary">云安全</span>
+                            <span class="skill-tag accent">客户端安全</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 导师3 -->
+                <div class="tech-card reveal" data-modal="modal-wang">
+                    <img src="./images/shmily.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">shmily</h3>
+                        <p class="trainer-title text-accent">北山安全团队核心成员、北山学院核心导师</p>
+                        <p class="trainer-bio">
+                            长期为一线互联网巨头、银行、证券等金融机构提供安全支持，累计提交高价值漏洞报告数千例，漏洞赏金收入突破七位数。擅长理解金融系统与互联网核心业务场景的容易出现的安全风险。擅长app，web漏洞挖掘，精通js逆向。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag accent">逆向工程</span>
+                            <span class="skill-tag primary">逻辑漏洞</span>
+                            <span class="skill-tag secondary">金融业务</span>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 导师4 -->
+                <div class="tech-card reveal" data-modal="modal-liu">
+                    <img src="./images/roy.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">roy</h3>
+                        <p class="trainer-title text-primary">北山安全团队核心成员、北山学院核心导师</p>
+                        <p class="trainer-bio">
+                            多家众测top级白帽，擅长挖掘银行、保险业务，漏洞累计奖金7位数，擅长挖掘保险和银行逻辑漏洞，针对保险、银行有自己的挖掘思路。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag primary">金融业务</span>
+                            <span class="skill-tag primary">逻辑漏洞</span>
+                            <span class="skill-tag secondary">众测</span>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 导师5 -->
+                <div class="tech-card reveal" data-modal="modal-chen">
+                    <img src="./images/%E5%B0%8F%E7%81%AB%E7%82%AC.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">小火炬</h3>
+                        <p class="trainer-title text-secondary">北山安全团队核心成员、北山学院导师</p>
+                        <p class="trainer-bio">
+                            24年挖洞赏金破百万，腾讯src 2024年TOP1，字节跳动src 2025年TOP1，还是多家src的TOP10，精通前端安全，云上安全，认证安全。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag secondary">云上安全</span>
+                            <span class="skill-tag secondary">认证安全</span>
+                            <span class="skill-tag accent">前端安全</span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="tech-card reveal">
+                    <img src="./images/sunflower.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">sunflower</h3>
+                        <p class="trainer-title text-primary">北山安全团队核心成员、北山学院导师</p>
+                        <p class="trainer-bio">
+                            百度安全应急响应中心TOP白帽，漏洞赏金突破100w。熟悉大模型预训练原理、微调技术以及落地应用、关注其本身应用及下游模块产生的安全问题，如提示词注入、越狱、MCP安全、agent、工作流安全等；擅长AI大模型应用业务和云上互联网业务漏洞挖掘。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag primary">大模型</span>
+                            <span class="skill-tag primary">MCP安全</span>
+                            <span class="skill-tag secondary">工作流安全</span>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 导师6 -->
+                <div class="tech-card reveal" data-modal="modal-yang">
+                    <img src="./images/%E4%B8%9C%E7%93%9C.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">东瓜</h3>
+                        <p class="trainer-title text-accent">北山安全团队核心成员、北山学院导师</p>
+                        <p class="trainer-bio">
+                            多家SRC Top10白帽，2024百度SRC第七，2025JDSRC第三，2025xhsSRC第六；擅长高危逻辑和越权、sql注入、ssrf等漏洞，专注WEB、小程序端挖掘。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag accent">小程序</span>
+                            <span class="skill-tag accent">互联网企业</span>
+                            <span class="skill-tag accent">越权</span>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 导师7 -->
+                <div class="tech-card reveal" data-modal="modal-huang">
+                    <img src="./images/%E7%99%BD%E8%89%B2%E9%BC%A0%E6%A0%87.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">白色鼠标</h3>
+                        <p class="trainer-title text-primary">北山安全团队核心成员、北山学院导师</p>
+                        <p class="trainer-bio">
+                            jsrc（京东安全应急响应中心）赏金过万漏洞20+
+                            年榜第二、bilisrc（哔哩哔哩安全应急响应中心）2023年第一，2025年双十一保卫战师长，擅长挖掘前后端分离权限绕过与未授权漏洞
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag primary">未授权</span>
+                            <span class="skill-tag primary">权限绕过</span>
+                            <span class="skill-tag secondary">逻辑漏洞</span>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 导师8 -->
+                <div class="tech-card reveal" data-modal="modal-bePower">
+                    <img src="./images/BePower.jpg" class="trainer-avatar">
+                    <div class="trainer-card-content">
+                        <h3 class="trainer-name">BePower</h3>
+                        <p class="trainer-title text-primary">北山安全团队核心成员、北山学院导师</p>
+                        <p class="trainer-bio">
+                            BSRC（北山安全应急响应中心）Top 10 白帽子，累计获得漏洞赏金超六位数。擅长挖掘逻辑漏洞、SQL注入（SQLi）、服务端请求伪造（SSRF）等，擅长对js的分析。
+                        </p>
+                        <div class="trainer-skills">
+                            <span class="skill-tag primary">SQL注入</span>
+                            <span class="skill-tag primary">逻辑漏洞</span>
+                            <span class="skill-tag secondary">SSRF</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- 学员成绩 -->
+
+    <section id="team" class="section-padding bg-dark-layer relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-4">学员成绩</h2>
+                <p class="text-lg text-text-secondary max-w-2xl mx-auto">
+                    真实学员漏洞挖掘成果展示，见证成长轨迹与实战能力
+                </p>
+            </div>
+
+            <!-- 成绩汇总榜单（完全整合版） -->
+            <!-- 成绩汇总榜单（精确匹配图片版） -->
+            <div class="mb-16 reveal">
+                <div class="tech-card p-4 gradient-border">
+                    <h3 class="text-xl font-bold text-white mb-6 text-center">部分学员2023、2024年SRC榜单成绩汇总（统计不全，学员自行上报）</h3>
+
+                    <!-- 统一数据展示区 -->
+                    <div class="bg-dark-bg rounded-lg border border-dark-border p-6 max-h-[650px] overflow-y-auto pr-2">
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 text-sm">
+                            <!-- 2024年数据（源自第一张图片） -->
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">货拉拉src：</span><span>2024年第一/第二/第四</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">BOSS：</span><span>2024年第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">法大大src：</span><span>2024年第一/第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">龙湖：</span><span>2024年第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">马蜂窝src：</span><span>2024年第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">微博src：</span><span>2023-2024第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">掌门教育SRC：</span><span>2024年第一/第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">自如SRC：</span><span>2024年第四</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">网易src：</span><span>2024年第八、2024年榜第二/第五</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">众安安全：</span><span>2024年第一/第五/第九</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">多点src：</span><span>2024年第一/第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">小赢src：</span><span>2024年第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">bilisrc：</span><span>2024年第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">百度src：</span><span>2024年第七/第二/第九、2024年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">银联src：</span><span>2024年第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">联想src：</span><span>2024年前十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">合合src：</span><span>2024年第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">漏洞盒子：</span><span>2024年第一季度第五、第三季度第四</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">360SRC：</span><span>2024年第三/第四</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">ZASRC：</span><span>2024年第一/第九</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">补天合合：</span><span>2024年第一/第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">Ucloud：</span><span>2023-2024前十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">看云src：</span><span>2024年第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">知识星球SRC：</span><span>2024年第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">京东src：</span><span>2024年第五</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">深信服SRC：</span><span>2024年第九</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">喜马拉雅src：</span><span>2024年第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">火线安全：</span><span>2024年第一/第八</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">度小满src：</span><span>2024年第五</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">补天叮咚买菜：</span><span>2024年第三</span></div>
+                            <div class="flex justify-between"><span class="text-text-secondary">ASRC
+                                    uc业务：</span><span>2024年第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">bsrc：</span><span>2024年第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">爱奇艺SRC：</span><span>2024年第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">PWSRC：</span><span>2024年第一/第四/第九/第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">UCloud：</span><span>2024年第五</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">焦点安全应急响应中心：</span><span>2024年榜第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">opposrc：</span><span>2024年榜第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">阿里src：</span><span>2024年年榜第四</span></div>
+                            <div class="flex justify-between"><span class="text-text-secondary">ucloud
+                                    src：</span><span>2024年年榜第一</span></div>
+                            <div class="flex justify-between"><span class="text-text-secondary">向日葵
+                                    src：</span><span>2024年年榜第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">有赞src：</span><span>2024年榜第六</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">腾讯src：</span><span>2024年年榜第一/第三</span></div>
+
+                            <!-- 2023年数据（源自第二张图片） -->
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">腾讯src：</span><span>2023年榜第三/第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">百度src：</span><span>2023年榜第二/第四/第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">网易src：</span><span>2023年榜第一/第六/第九</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">美团src：</span><span>2023年榜第八</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">平安src：</span><span>2023年榜第五</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">度小满src：</span><span>2023年榜第五</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">货拉拉src：</span><span>2023年榜第一/第四/第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">贝壳src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">微博src：</span><span>2023年榜第一/第九</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">携程src：</span><span>2023年榜第六</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">小红书src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">讯飞src：</span><span>2023年榜第八</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">雷神众测：</span><span>2023年榜第八</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">完美世界src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">知识星球src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">人教src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">悟空租车src：</span><span>2023年榜第二/第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">喜马拉雅src：</span><span>2023年榜第一/第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">小赢src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">法大大src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">火线众测：</span><span>2023年第一</span></div>
+                            <div class="flex justify-between"><span class="text-text-secondary">bilibili
+                                    src：</span><span>2023年榜第五/第十</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">同程src：</span><span>2023年榜第九</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">酷狗src：</span><span>2023年榜第一</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">yysrc：</span><span>2023年总榜第四</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">马蜂窝src：</span><span>2023年榜第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">众安SRC：</span><span>2023年榜第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">智联src：</span><span>2023年榜第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">好未来src：</span><span>2023年总榜第三</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">途虎src：</span><span>2023年榜第六/第九</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">唯品会src：</span><span>2023年榜第六/第七</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">多点src：</span><span>2023年榜第一/第二</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">新浪src：</span><span>2023年榜第七</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">t3src：</span><span>2023年榜第四</span></div>
+                            <div class="flex justify-between"><span
+                                    class="text-text-secondary">2023年重大项目：</span><span>2023年双十一保卫战军长</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <section id="contact" class="contact-section bg-dark-bg relative">
+        <div class="text-center mb-4 reveal">
+            <h2 class="font-bold text-white mb-4">联系我们</h2>
+            <p class="text-lg text-text-secondary max-w-2xl mx-auto">
+                获取更多课程信息或预约免费试听
+            </p>
+        </div>
+        <div class="max-w-3xl mx-auto">
+            <div class="reveal">
+                <div class="tech-card p-8 mb-8">
+                    <h3 class="text-2xl font-bold text-white mb-6">联系方式</h3>
+                    <div class="space-y-6">
+                        <!-- 微信 -->
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xl mt-1 flex-shrink-0">
+                                <i class="fa fa-weixin"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">微信</h4>
+                                <p class="text-text-secondary text-lg">ZhongBeishan</p>
+                            </div>
+                        </div>
+
+                        <!-- 抖音 -->
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xl mt-1 flex-shrink-0">
+                                <i class="fa fa-music"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">抖音</h4>
+                                <p class="text-text-secondary text-lg">钟北山（VZhongbeishan）</p>
+                            </div>
+                        </div>
+
+                        <!-- 微信公众号 -->
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xl mt-1 flex-shrink-0">
+                                <i class="fa fa-newspaper-o"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">微信公众号</h4>
+                                <p class="text-text-secondary text-lg">北山安全</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="tech-card p-6 gradient-border">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center text-secondary text-2xl">
+                        <i class="fa fa-headphones"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-white font-semibold">免费试听</h4>
+                        <p class="text-text-secondary text-sm">添加微信预约免费体验课，了解课程内容</p>
+                    </div>
+                    <a href="weixin://dl/chat?ZhongBeishan"
+                        class="text-primary hover:text-primary-dark transition-colors" title="微信联系">
+                        <i class="fa fa-weixin text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        </div>
+        </div>
+    </section>
+    <!-- 页脚 -->
+    <footer class="bg-dark-layer border-t border-dark-border py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <a href="#home" class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-dark font-bold text-xl glow">
+                            <i class="fa fa-shield"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gradient">北山学院</span>
+                    </a>
+                    <p class="text-text-secondary mb-4">
+                        专业的网络安全SRC漏洞挖掘培训机构，培养顶尖安全人才。
+                    </p>
+
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-text-secondary hover:text-primary transition-colors">首页</a></li>
+                        <li><a href="#courses" class="text-text-secondary hover:text-primary transition-colors">课程</a>
+                        </li>
+                        <li><a href="#trainers" class="text-text-secondary hover:text-primary transition-colors">导师</a>
+                        </li>
+                        <li><a href="#team" class="text-text-secondary hover:text-primary transition-colors">团队</a></li>
+                        <li><a href="#contact" class="text-text-secondary hover:text-primary transition-colors">联系我们</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">联系我们</h4>
+                    <div class="flex flex-col items-center">
+                        <!-- 微信二维码容器 -->
+                        <div class="w-48 h-48 bg-white p-2 rounded-lg mb-4 shadow-lg">
+                            <img src="./images/wx.jpg" alt="北山学院微信二维码" class="w-full h-full object-contain">
+                        </div>
+                        <!-- 二维码说明文字 -->
+                        <p class="text-text-secondary text-center">
+                            <i class="fa fa-weixin text-primary mr-1"></i>
+                            扫码添加微信咨询课程详情
+                        </p>
+                        <p class="text-text-secondary text-sm mt-2 text-center">
+                            微信：ZhongBeishan
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-dark-border pt-8 text-center text-text-secondary text-sm">
+                <p>© 2025 北山学院 版权所有</p>
+            </div>
+        </div>
+    </footer>
+    <!-- JavaScript -->
+    <!-- 替换原有的轮播图JavaScript代码 -->
+    <script>
+        // 轮播图功能 - 修复版本，支持多实例
+        class Carousel {
+            constructor(carouselElement) {
+                this.carousel = carouselElement;
+                this.slides = this.carousel.querySelectorAll('.carousel-slide');
+                this.slideContainer = this.carousel.querySelector('.carousel-slides');
+                this.indicators = this.carousel.querySelectorAll('.carousel-indicator');
+                this.prevBtn = this.carousel.querySelector('.carousel-prev');
+                this.nextBtn = this.carousel.querySelector('.carousel-next');
+                this.currentSlide = 0;
+                this.autoSlideInterval = null;
+
+                if (this.slides.length === 0 || !this.slideContainer) {
+                    console.warn("Carousel elements not found in this instance");
+                    return;
+                }
+
+                this.initialize();
+            }
+
+            initialize() {
+                // 确保初始索引有效
+                this.currentSlide = Math.max(0, Math.min(this.currentSlide, this.slides.length - 1));
+                this.updateSlide();
+
+                // 绑定事件
+                if (this.prevBtn) {
+                    this.prevBtn.addEventListener('click', () => this.prevSlide());
+                }
+
+                if (this.nextBtn) {
+                    this.nextBtn.addEventListener('click', () => this.nextSlide());
+                }
+
+                this.indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                });
+
+                // 鼠标悬停暂停自动播放
+                this.carousel.addEventListener('mouseenter', () => this.stopAutoSlide());
+                this.carousel.addEventListener('mouseleave', () => this.startAutoSlide());
+
+                // 启动自动播放
+                this.startAutoSlide();
+            }
+
+            updateSlide() {
+                if (this.slides.length === 0) return;
+
+                // 更新滑动位置
+                this.slideContainer.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+
+                // 更新指示器
+                this.indicators.forEach((indicator, index) => {
+                    if (index === this.currentSlide) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+
+            prevSlide() {
+                this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+                this.updateSlide();
+            }
+
+            nextSlide() {
+                this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+                this.updateSlide();
+            }
+
+            goToSlide(index) {
+                if (index >= 0 && index < this.slides.length) {
+                    this.currentSlide = index;
+                    this.updateSlide();
+                }
+            }
+
+            startAutoSlide() {
+                if (this.slides.length > 1) { // 只有一张幻灯片时不自动播放
+                    this.stopAutoSlide(); // 先停止已有的定时器
+                    this.autoSlideInterval = setInterval(() => {
+                        this.nextSlide();
+                    }, 5000); // 5秒切换一次
+                }
+            }
+
+            stopAutoSlide() {
+                if (this.autoSlideInterval) {
+                    clearInterval(this.autoSlideInterval);
+                    this.autoSlideInterval = null;
+                }
+            }
+        }
+
+        // 页面加载完成后初始化所有轮播
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化所有轮播实例
+            const carousels = document.querySelectorAll('.carousel');
+            carousels.forEach(carousel => {
+                new Carousel(carousel);
+            });
+        });
+
+        // 保留其他原有功能代码
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuToggle.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+
+        // 滚动动画
+        function checkReveal() {
+            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+            const windowHeight = window.innerHeight;
+            reveals.forEach(element => {
+                const revealTop = element.getBoundingClientRect().top;
+                const revealPoint = 150;
+                if (revealTop < windowHeight - revealPoint) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkReveal);
+        window.addEventListener('load', checkReveal);
+
+        // 当计数器元素进入视口时开始动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        const countersSection = document.querySelector('.counter').parentElement.parentElement.parentElement;
+        if (countersSection) {
+            observer.observe(countersSection);
+        }
+
+        // 创建粒子背景
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            if (!container) {
+                console.error("Particle container not found!");
+                return;
+            }
+            const particleCount = 60;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 4 + 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                const colorClass = Math.random() > 0.5 ? 'particle-blue' : 'particle-purple';
+                particle.classList.add(colorClass);
+                const delay = Math.random() * 10;
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                if (Math.random() > 0.5) {
+                    particle.style.animationDirection = 'reverse';
+                }
+                container.appendChild(particle);
+            }
+        }
+        window.addEventListener('load', createParticles);
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+    @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.8;
+            transition: opacity 2s ease;
+            animation: float 10s ease-in-out infinite alternate;
+        }
+        .particle-blue {
+            background-color: rgba(0, 240, 255, 0.4);
+            box-shadow: var(--glow-primary), 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .particle-purple {
+            background-color: rgba(157, 78, 221, 0.4);
+            box-shadow: var(--glow-secondary), 0 0 20px rgba(157, 78, 221, 0.3);
+        }
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.8; }
+            25% { transform: translateY(-40px) translateX(30px) rotate(10deg); opacity: 0.9; }
+            50% { transform: translateY(-10px) translateX(-40px) rotate(-5deg); opacity: 0.7; }
+            75% { transform: translateY(30px) translateX(20px) rotate(5deg); opacity: 0.85; }
+            100% { transform: translateY(20px) translateX(-30px) rotate(-10deg); opacity: 0.75; }
+        }
+`;
+        document.head.appendChild(style);
+
+        // 导师模态框交互
+        document.addEventListener('DOMContentLoaded', function () {
+            const trainerCards = document.querySelectorAll('.tech-card[data-modal]');
+            const modalOverlays = document.querySelectorAll('.modal-overlay');
+            const modalCloses = document.querySelectorAll('.modal-close');
+            trainerCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const modalId = card.getAttribute('data-modal');
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+            modalCloses.forEach(close => {
+                close.addEventListener('click', () => {
+                    const modal = close.closest('.modal-overlay');
+                    if (modal) {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            modalOverlays.forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
